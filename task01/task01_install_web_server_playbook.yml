@@ -1,0 +1,39 @@
+---
+- name: Apache Web Server startup
+  hosts: all
+  user: ansible
+  become: yes
+  become_method: sudo
+  become_user: root
+
+  tasks:
+  - name: Install httpd
+    package:
+      name:  httpd
+      state: latest
+
+  - name: Ensure service firewalld is running 
+    service: 
+      name: firewalld 
+      state: started 
+
+  - name: Ensure httpd is running
+    service:
+      name: httpd
+      state: started
+ 
+  - name: Service http is allowed in firewall settings
+    firewalld:
+      service: http
+      state: enabled
+
+#  - name: Firewalld restarting
+#    service:
+#      name: firewalld
+#      state: restarted
+
+  - name: create index.html file with message "Welcome to my web server"
+    copy:
+      content: 'Welcome to my web server'
+      dest: "/var/www/html/index.html"
+...

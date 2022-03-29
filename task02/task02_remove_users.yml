@@ -1,0 +1,13 @@
+---
+- name: removing users Alice, Bob, Carol
+  hosts: node1.example.com
+
+  tasks:
+    - name: remove users
+      ansible.builtin.user:
+        name: "{{ item }}"
+        state: absent
+      loop:
+        - alice
+        - bob
+        - carol

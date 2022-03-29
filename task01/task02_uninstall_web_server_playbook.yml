@@ -1,0 +1,28 @@
+---
+- name: Apache Web Server removing
+  hosts: all
+  user: ansible
+  become: yes
+  become_method: sudo
+  become_user: root
+
+  tasks:
+  - name: Uninstall httpd
+    package:
+      name:  httpd
+      state: absent
+
+  - name: Ensure service firewalld is running 
+    service: 
+      name: firewalld 
+      state: started 
+
+  - name: Deny service http in firewall settings
+    firewalld:
+      service: http
+      state: disabled
+
+  - name: create index.html file with message "Welcome to my web server"
+    file:
+      path: /var/www/html/index.html
+      state: absent
